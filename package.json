@@ -1,0 +1,13 @@
+{
+  "name": "heavy-token-replacer",
+  "version": "1.0.0",
+  "description": "Figma plugin to find and replace hex colors with variable references",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.98.0",
+    "typescript": "^5.3.0"
+  }
+}

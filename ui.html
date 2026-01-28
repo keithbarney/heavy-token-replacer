@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 12px;
+      color: #333;
+      background: #fff;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .results {
+      flex: 1;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      padding: 12px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+
+    .results h2 {
+      font-size: 11px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 600;
+      color: #666;
+      padding: 6px 8px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #e5e5e5;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .hex-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .color-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1px solid #e5e5e5;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: #333;
+      color: #fff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #000;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #e5e5e5;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Heavy Token Replacer</h1>
+  </div>
+
+  <div class="results">
+    <h2>Results</h2>
+    <p class="status" id="status">No tokens found yet.</p>
+    <table id="results-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>Found Hex</th>
+          <th>Mapped Variable</th>
+        </tr>
+      </thead>
+      <tbody id="results-body"></tbody>
+    </table>
+  </div>
+
+  <div class="actions">
+    <button class="btn-secondary" id="find">Find Tokens</button>
+    <button class="btn-primary" id="replace" disabled>Replace Tokens</button>
+  </div>
+
+  <script>
+    let foundTokens = [];
+
+    const findBtn = document.getElementById('find');
+    const replaceBtn = document.getElementById('replace');
+    const status = document.getElementById('status');
+    const resultsTable = document.getElementById('results-table');
+    const resultsBody = document.getElementById('results-body');
+
+    // Handle messages from plugin code
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+
+      if (msg?.type === 'foundTokens') {
+        foundTokens = msg.data;
+        populateResultsTable(foundTokens);
+      }
+    };
+
+    function populateResultsTable(tokens) {
+      resultsBody.innerHTML = '';
+
+      if (tokens.length === 0) {
+        status.textContent = 'No tokens found.';
+        resultsTable.style.display = 'none';
+        replaceBtn.disabled = true;
+        return;
+      }
+
+      for (const token of tokens) {
+        const tr = document.createElement('tr');
+
+        const tdHex = document.createElement('td');
+        tdHex.innerHTML = `<div class="hex-cell"><span class="color-swatch" style="background: ${token.hex}"></span>${token.hex}</div>`;
+        tr.appendChild(tdHex);
+
+        const tdVariable = document.createElement('td');
+        tdVariable.textContent = token.variableName;
+        tr.appendChild(tdVariable);
+
+        resultsBody.appendChild(tr);
+      }
+
+      status.textContent = `${tokens.length} token(s) found.`;
+      resultsTable.style.display = 'table';
+      replaceBtn.disabled = false;
+    }
+
+    findBtn.addEventListener('click', () => {
+      status.textContent = 'Searching...';
+      parent.postMessage({ pluginMessage: { type: 'findTokens' } }, '*');
+    });
+
+    replaceBtn.addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'replaceTokens', data: foundTokens } }, '*');
+    });
+  </script>
+</body>
+</html>
