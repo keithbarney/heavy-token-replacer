@@ -1,11 +1,14 @@
 {
   "name": "Heavy Token Replacer",
-  "id": "PLUGIN_ID",
+  "id": "9567518611275182103",
   "api": "1.0.0",
-  "main": "code.js",
-  "ui": "ui.html",
+  "main": "dist/code.js",
   "capabilities": [],
   "enableProposedApi": false,
   "editorType": ["figma"],
-  "documentAccess": "dynamic-page"
+  "ui": "ui.html",
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  }
 }
