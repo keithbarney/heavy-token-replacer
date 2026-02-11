@@ -164,6 +164,8 @@
     const resultsTable = document.getElementById('results-table');
     const resultsBody = document.getElementById('results-body');
 
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
     // Handle messages from plugin code
     window.onmessage = (event) => {
       const msg = event.data.pluginMessage;
@@ -188,7 +190,14 @@
         const tr = document.createElement('tr');
 
         const tdHex = document.createElement('td');
-        tdHex.innerHTML = `<div class="hex-cell"><span class="color-swatch" style="background: ${token.hex}"></span>${token.hex}</div>`;
+        const hexWrapper = document.createElement('div');
+        hexWrapper.className = 'hex-cell';
+        const swatch = document.createElement('span');
+        swatch.className = 'color-swatch';
+        swatch.style.background = token.hex;
+        hexWrapper.appendChild(swatch);
+        hexWrapper.appendChild(document.createTextNode(token.hex));
+        tdHex.appendChild(hexWrapper);
         tr.appendChild(tdHex);
 
         const tdVariable = document.createElement('td');
