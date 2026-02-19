@@ -1,225 +1,1051 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8" />
   <style>
-    * {
+    /* ── Base16 Ocean / Spacegray – Heavy Suite Theme ── */
+    :root {
+      --bg0:    #1b2b34;
+      --bg1:    #1f2f39;
+      --bg2:    #243340;
+      --bg3:    #2e3d49;
+      --bg4:    #3d4f5c;
+      --border: #37474f;
+      --fg0:    #eff1f5;
+      --fg1:    #c0c5ce;
+      --fg2:    #a7adba;
+      --fg3:    #65737e;
+      --blue:   #6699cc;
+      --cyan:   #5fb3b3;
+      --green:  #99c794;
+      --yellow: #fac863;
+      --orange: #f99157;
+      --red:    #ec5f67;
+      --purple: #c594c5;
+    }
+
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
     body {
-      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       font-size: 12px;
-      color: #333;
-      background: #fff;
-      padding: 16px;
+      line-height: 1.5;
+      color: var(--fg1);
+      background: var(--bg0);
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
 
+    /* ── Header ── */
     .header {
-      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px 10px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
 
-    h1 {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .results {
-      flex: 1;
-      background: #fafafa;
-      border: 1px solid #e5e5e5;
-      border-radius: 6px;
-      padding: 12px;
-      overflow-y: auto;
-      margin-bottom: 12px;
-    }
-
-    .results h2 {
-      font-size: 11px;
-      font-weight: 600;
-      color: #666;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .status {
-      font-size: 11px;
-      color: #666;
-      margin-bottom: 12px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-    }
-
-    th {
-      text-align: left;
-      font-weight: 600;
-      color: #666;
-      padding: 6px 8px;
-      border-bottom: 1px solid #e5e5e5;
-    }
-
-    td {
-      padding: 6px 8px;
-      border-bottom: 1px solid #e5e5e5;
-      font-family: 'SF Mono', Monaco, monospace;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .hex-cell {
+    .header-left {
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .color-swatch {
-      width: 16px;
-      height: 16px;
-      border-radius: 3px;
-      border: 1px solid #e5e5e5;
+    .logo {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
     }
 
-    .actions {
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--fg0);
+      letter-spacing: -0.01em;
+    }
+
+    .version {
+      font-size: 10px;
+      color: var(--fg3);
+      font-weight: 400;
+      margin-top: 1px;
+    }
+
+    /* ── Options Panel ── */
+    .options {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .options-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .option-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--fg3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      min-width: 60px;
+    }
+
+    /* Toggle switch */
+    .toggle-group {
+      display: flex;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .toggle-group label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      color: var(--fg2);
+      font-size: 11px;
+      font-weight: 500;
+      transition: background 0.12s, color 0.12s;
+      user-select: none;
+    }
+
+    .toggle-group input[type="radio"] {
+      display: none;
+    }
+
+    .toggle-group input[type="radio"]:checked + span {
+      color: var(--fg0);
+    }
+
+    .toggle-group label:has(input:checked) {
+      background: var(--bg4);
+      color: var(--fg0);
+    }
+
+    /* Checkboxes */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--fg2);
+      font-size: 11px;
+      user-select: none;
+      transition: color 0.12s;
+    }
+
+    .checkbox-label:hover {
+      color: var(--fg1);
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      display: none;
+    }
+
+    .checkbox-box {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 3px;
+      background: var(--bg2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.12s, background 0.12s;
+      flex-shrink: 0;
+    }
+
+    .checkbox-label input:checked ~ .checkbox-box {
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .checkbox-box::after {
+      content: '';
+      display: none;
+      width: 4px;
+      height: 7px;
+      border: 1.5px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+
+    .checkbox-label input:checked ~ .checkbox-box::after {
+      display: block;
+    }
+
+    /* ── Scan Button ── */
+    .scan-wrap {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .btn-scan {
+      width: 100%;
+      padding: 9px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: background 0.12s, opacity 0.12s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-scan:hover:not(:disabled) { background: #7aabdb; }
+    .btn-scan:active:not(:disabled) { background: #5a88b5; }
+    .btn-scan:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Progress Bar ── */
+    .progress-wrap {
+      padding: 8px 16px 0;
+      display: none;
+      flex-shrink: 0;
+    }
+
+    .progress-wrap.visible { display: block; }
+
+    .progress-bar-track {
+      height: 3px;
+      background: var(--bg3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 2px;
+      transition: width 0.2s ease;
+      width: 0%;
+    }
+
+    .progress-label {
+      font-size: 10px;
+      color: var(--fg3);
+      margin-top: 4px;
+    }
+
+    /* ── Results Header ── */
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px 6px;
+      flex-shrink: 0;
+    }
+
+    .results-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--fg2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .results-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-count {
+      background: var(--bg3);
+      color: var(--fg2);
+    }
+
+    .badge-collision {
+      background: rgba(250, 200, 99, 0.15);
+      color: var(--yellow);
+      border: 1px solid rgba(250, 200, 99, 0.25);
+    }
+
+    /* ── Filter Tabs ── */
+    .filter-tabs {
+      display: flex;
+      gap: 2px;
+      padding: 0 16px 6px;
+      flex-shrink: 0;
+    }
+
+    .filter-tab {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--fg3);
+      background: none;
+      border: none;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .filter-tab:hover { color: var(--fg1); background: var(--bg2); }
+    .filter-tab.active { color: var(--fg0); background: var(--bg3); }
+
+    /* ── Results Table ── */
+    .results-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      min-height: 0;
+    }
+
+    .results-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .results-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .results-scroll::-webkit-scrollbar-thumb {
+      background: var(--bg4);
+      border-radius: 2px;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      gap: 8px;
+      color: var(--fg3);
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      font-size: 28px;
+      opacity: 0.5;
+    }
+
+    .empty-state-text {
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .empty-state-sub {
+      font-size: 11px;
+      color: var(--fg3);
+      opacity: 0.7;
+    }
+
+    /* Results table */
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      display: none;
+    }
+
+    .results-table.visible { display: table; }
+
+    .results-table thead tr {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: var(--bg0);
+    }
+
+    .results-table th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--fg3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .results-table th:first-child { padding-left: 16px; }
+    .results-table th:last-child  { padding-right: 16px; }
+
+    .results-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid rgba(55, 71, 79, 0.5);
+      vertical-align: middle;
+    }
+
+    .results-table td:first-child { padding-left: 16px; }
+    .results-table td:last-child  { padding-right: 16px; }
+
+    .results-table tr:last-child td { border-bottom: none; }
+
+    .results-table tr.collision-row {
+      background: rgba(250, 200, 99, 0.04);
+    }
+
+    .results-table tr.hidden-row { display: none; }
+
+    /* Row checkbox */
+    .row-check {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+
+    /* Layer name */
+    .layer-name {
+      max-width: 110px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--fg1);
+      font-size: 11px;
+    }
+
+    .layer-page {
+      font-size: 9px;
+      color: var(--fg3);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 110px;
+    }
+
+    .stroke-badge {
+      font-size: 9px;
+      color: var(--purple);
+      font-weight: 600;
+    }
+
+    /* Hex cell */
+    .hex-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    .hex-text {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 10px;
+      color: var(--fg2);
+      letter-spacing: 0.02em;
+    }
+
+    /* Variable cell */
+    .var-cell {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .var-name {
+      font-size: 11px;
+      color: var(--cyan);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 120px;
+    }
+
+    .collision-icon {
+      color: var(--yellow);
+      font-size: 10px;
+      flex-shrink: 0;
+      cursor: help;
+      title: "Multiple variables share this hex value";
+    }
+
+    /* Collision variable picker */
+    .var-select {
+      font-size: 10px;
+      background: var(--bg3);
+      color: var(--cyan);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 4px;
+      max-width: 140px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .var-select:focus {
+      border-color: var(--blue);
+    }
+
+    /* ── Footer Actions ── */
+    .footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .footer-select-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-text {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--fg3);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 0;
+      transition: color 0.12s;
+    }
+
+    .btn-text:hover { color: var(--fg1); }
+
+    .footer-sep { color: var(--bg4); }
+
+    .footer-actions {
       display: flex;
       gap: 8px;
     }
 
-    button {
+    .btn {
       flex: 1;
-      padding: 10px 16px;
-      font-size: 12px;
-      font-weight: 500;
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 600;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      transition: background 0.15s ease;
+      transition: background 0.12s, opacity 0.12s;
+      letter-spacing: 0.01em;
     }
 
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-replace {
+      background: var(--cyan);
+      color: var(--bg0);
     }
 
-    .btn-primary {
-      background: #333;
-      color: #fff;
+    .btn-replace:hover:not(:disabled) { background: #73c7c7; }
+    .btn-replace:active:not(:disabled) { background: #4e9e9e; }
+
+    .btn-export {
+      background: var(--bg3);
+      color: var(--fg1);
+      border: 1px solid var(--border);
+      flex: 0 0 auto;
+      padding: 8px 12px;
     }
 
-    .btn-primary:hover:not(:disabled) {
-      background: #000;
+    .btn-export:hover:not(:disabled) { background: var(--bg4); }
+
+    /* ── Status toast ── */
+    .status-bar {
+      font-size: 10px;
+      color: var(--fg3);
+      text-align: center;
+      padding: 2px 16px 0;
+      min-height: 16px;
     }
 
-    .btn-secondary {
-      background: #f0f0f0;
-      color: #333;
-    }
-
-    .btn-secondary:hover:not(:disabled) {
-      background: #e5e5e5;
-    }
+    .status-bar.success { color: var(--green); }
+    .status-bar.error   { color: var(--red); }
+    .status-bar.warn    { color: var(--yellow); }
   </style>
 </head>
 <body>
+
+  <!-- ── Header ── -->
   <div class="header">
-    <h1>Heavy Token Replacer</h1>
+    <div class="header-left">
+      <svg class="logo" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="20" height="20" rx="4" fill="#243340"/>
+        <circle cx="7" cy="10" r="3.5" fill="#6699cc"/>
+        <path d="M11.5 10 H15.5" stroke="#65737e" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M14 8.5 L15.5 10 L14 11.5" stroke="#65737e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <polygon points="17,7 20,10 17,13 14,10" fill="none"/>
+      </svg>
+      <div>
+        <div class="title">Heavy Token Replacer</div>
+      </div>
+    </div>
+    <div class="version">v1.0.0</div>
   </div>
 
-  <div class="results">
-    <h2>Results</h2>
-    <p class="status" id="status">No tokens found yet.</p>
-    <table id="results-table" style="display: none;">
+  <!-- ── Options ── -->
+  <div class="options">
+    <div class="options-row">
+      <span class="option-label">Scope</span>
+      <div class="toggle-group">
+        <label>
+          <input type="radio" name="scope" value="page" checked />
+          <span>Current Page</span>
+        </label>
+        <label>
+          <input type="radio" name="scope" value="all" />
+          <span>All Pages</span>
+        </label>
+      </div>
+    </div>
+    <div class="options-row">
+      <span class="option-label">Options</span>
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="opt-strokes" checked />
+          <span class="checkbox-box"></span>
+          Include Strokes
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="opt-selection" />
+          <span class="checkbox-box"></span>
+          Selection Only
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Scan Button ── -->
+  <div class="scan-wrap">
+    <button class="btn-scan" id="btn-scan">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M9 9 L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Scan Document
+    </button>
+  </div>
+
+  <!-- ── Progress ── -->
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-label" id="progress-label">Scanning…</div>
+  </div>
+
+  <!-- ── Results Header ── -->
+  <div class="results-header">
+    <span class="results-title">Results</span>
+    <div class="results-meta">
+      <span class="badge badge-count" id="badge-count" style="display:none"></span>
+      <span class="badge badge-collision" id="badge-collision" style="display:none"></span>
+    </div>
+  </div>
+
+  <!-- ── Filter Tabs ── -->
+  <div class="filter-tabs" id="filter-tabs" style="display:none">
+    <button class="filter-tab active" data-filter="all">All</button>
+    <button class="filter-tab" data-filter="clean">Clean</button>
+    <button class="filter-tab" data-filter="collision">Collisions</button>
+  </div>
+
+  <!-- ── Results Scroll Area ── -->
+  <div class="results-scroll">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-state-icon">⬡</div>
+      <div class="empty-state-text">Click <strong style="color:var(--fg1)">Scan Document</strong> to find<br>hardcoded color fills.</div>
+      <div class="empty-state-sub">Checks all local color variables across<br>every mode (light, dark, brand…)</div>
+    </div>
+
+    <table class="results-table" id="results-table">
       <thead>
         <tr>
-          <th>Found Hex</th>
-          <th>Mapped Variable</th>
+          <th style="width:22px"></th>
+          <th>Layer</th>
+          <th>Hex</th>
+          <th>Variable</th>
         </tr>
       </thead>
       <tbody id="results-body"></tbody>
     </table>
   </div>
 
-  <div class="actions">
-    <button class="btn-secondary" id="find">Find Tokens</button>
-    <button class="btn-primary" id="replace" disabled>Replace Tokens</button>
+  <!-- ── Footer ── -->
+  <div class="footer">
+    <div class="footer-select-row" id="select-row" style="display:none">
+      <button class="btn-text" id="btn-select-all">Select All</button>
+      <span class="footer-sep">·</span>
+      <button class="btn-text" id="btn-deselect-all">Deselect</button>
+      <span class="footer-sep">·</span>
+      <button class="btn-text" id="btn-select-collisions" style="color:var(--yellow)">Collisions Only</button>
+    </div>
+    <div class="footer-actions">
+      <button class="btn btn-replace" id="btn-replace" disabled>Replace Selected</button>
+      <button class="btn btn-export" id="btn-export" disabled title="Export CSV report">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:-2px;margin-right:4px">
+          <path d="M6 1v6M3.5 5 L6 7.5 L8.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M1 9.5 h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        CSV
+      </button>
+    </div>
+    <div class="status-bar" id="status-bar"></div>
   </div>
 
-  <script>
-    let foundTokens = [];
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+let allTokens = [];
+let currentFilter = 'all';
+let collisionOverrides = {}; // key: nodeId:property:fillIndex → variableId
 
-    const findBtn = document.getElementById('find');
-    const replaceBtn = document.getElementById('replace');
-    const status = document.getElementById('status');
-    const resultsTable = document.getElementById('results-table');
-    const resultsBody = document.getElementById('results-body');
+// ─── Elements ─────────────────────────────────────────────────────────────────
+const btnScan         = document.getElementById('btn-scan');
+const btnReplace      = document.getElementById('btn-replace');
+const btnExport       = document.getElementById('btn-export');
+const btnSelectAll    = document.getElementById('btn-select-all');
+const btnDeselectAll  = document.getElementById('btn-deselect-all');
+const btnSelectCollisions = document.getElementById('btn-select-collisions');
 
-    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+const progressWrap    = document.getElementById('progress-wrap');
+const progressFill    = document.getElementById('progress-fill');
+const progressLabel   = document.getElementById('progress-label');
 
-    // Handle messages from plugin code
-    window.onmessage = (event) => {
-      const msg = event.data.pluginMessage;
+const badgeCount      = document.getElementById('badge-count');
+const badgeCollision  = document.getElementById('badge-collision');
+const filterTabs      = document.getElementById('filter-tabs');
 
-      if (msg?.type === 'foundTokens') {
-        foundTokens = msg.data;
-        populateResultsTable(foundTokens);
+const emptyState      = document.getElementById('empty-state');
+const resultsTable    = document.getElementById('results-table');
+const resultsBody     = document.getElementById('results-body');
+
+const selectRow       = document.getElementById('select-row');
+const statusBar       = document.getElementById('status-bar');
+
+const scopeRadios     = document.querySelectorAll('input[name="scope"]');
+const optStrokes      = document.getElementById('opt-strokes');
+const optSelection    = document.getElementById('opt-selection');
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function setStatus(msg, type = '') {
+  statusBar.textContent = msg;
+  statusBar.className = 'status-bar' + (type ? ' ' + type : '');
+}
+
+function getScanOptions() {
+  const scopeVal = [...scopeRadios].find(r => r.checked)?.value ?? 'page';
+  return {
+    scanAllPages: scopeVal === 'all',
+    selectionOnly: optSelection.checked,
+    includeStrokes: optStrokes.checked,
+  };
+}
+
+function getSelectedTokens() {
+  const checkboxes = resultsBody.querySelectorAll('.row-check:checked');
+  const selectedNodeKeys = new Set([...checkboxes].map(cb => cb.dataset.key));
+  return allTokens.filter(t => {
+    const key = `${t.nodeId}:${t.property}:${t.fillIndex}`;
+    return selectedNodeKeys.has(key);
+  });
+}
+
+function updateReplaceButton() {
+  const checked = resultsBody.querySelectorAll('.row-check:checked').length;
+  btnReplace.disabled = checked === 0;
+  btnReplace.textContent = checked > 0 ? `Replace ${checked} Token${checked !== 1 ? 's' : ''}` : 'Replace Selected';
+}
+
+// ─── Render Results ───────────────────────────────────────────────────────────
+function renderResults(tokens) {
+  resultsBody.innerHTML = '';
+
+  if (tokens.length === 0) {
+    emptyState.style.display = 'flex';
+    resultsTable.classList.remove('visible');
+    selectRow.style.display = 'none';
+    btnReplace.disabled = true;
+    btnExport.disabled = true;
+    badgeCount.style.display = 'none';
+    badgeCollision.style.display = 'none';
+    filterTabs.style.display = 'none';
+    return;
+  }
+
+  const collisions = tokens.filter(t => t.hasCollision);
+
+  emptyState.style.display = 'none';
+  resultsTable.classList.add('visible');
+  selectRow.style.display = 'flex';
+  btnExport.disabled = false;
+
+  badgeCount.textContent = `${tokens.length} token${tokens.length !== 1 ? 's' : ''}`;
+  badgeCount.style.display = '';
+
+  if (collisions.length > 0) {
+    badgeCollision.textContent = `⚠ ${collisions.length} collision${collisions.length !== 1 ? 's' : ''}`;
+    badgeCollision.style.display = '';
+    filterTabs.style.display = 'flex';
+  } else {
+    badgeCollision.style.display = 'none';
+    filterTabs.style.display = 'none';
+  }
+
+  for (const token of tokens) {
+    const key = `${token.nodeId}:${token.property}:${token.fillIndex}`;
+    const isCollision = token.hasCollision;
+
+    const tr = document.createElement('tr');
+    if (isCollision) tr.classList.add('collision-row');
+
+    // Filter visibility
+    if (currentFilter === 'clean' && isCollision) tr.classList.add('hidden-row');
+    if (currentFilter === 'collision' && !isCollision) tr.classList.add('hidden-row');
+
+    tr.dataset.collision = isCollision ? 'true' : 'false';
+
+    // Checkbox
+    const tdCheck = document.createElement('td');
+    const check = document.createElement('input');
+    check.type = 'checkbox';
+    check.className = 'row-check';
+    check.dataset.key = key;
+    check.checked = true;
+    check.addEventListener('change', updateReplaceButton);
+    tdCheck.appendChild(check);
+    tr.appendChild(tdCheck);
+
+    // Layer name
+    const tdName = document.createElement('td');
+    tdName.innerHTML = `
+      <div class="layer-name" title="${esc(token.nodeName)}">${esc(token.nodeName)}</div>
+      <div class="layer-page">${esc(token.pageName)}${token.property === 'strokes' ? ' <span class="stroke-badge">STROKE</span>' : ''}</div>
+    `;
+    tr.appendChild(tdName);
+
+    // Hex
+    const tdHex = document.createElement('td');
+    tdHex.innerHTML = `
+      <div class="hex-cell">
+        <span class="swatch" style="background:${esc(token.hex)}"></span>
+        <span class="hex-text">${esc(token.hex)}</span>
+      </div>
+    `;
+    tr.appendChild(tdHex);
+
+    // Variable (with collision dropdown)
+    const tdVar = document.createElement('td');
+    if (isCollision) {
+      const select = document.createElement('select');
+      select.className = 'var-select';
+      select.title = `${token.collisionCount} variables share ${token.hex}`;
+
+      for (const v of token.allVariables) {
+        const opt = document.createElement('option');
+        opt.value = v.id;
+        opt.textContent = v.name;
+        if (v.id === (collisionOverrides[key] ?? token.variableId)) {
+          opt.selected = true;
+        }
+        select.appendChild(opt);
       }
-    };
 
-    function populateResultsTable(tokens) {
-      resultsBody.innerHTML = '';
+      select.addEventListener('change', () => {
+        collisionOverrides[key] = select.value;
+      });
 
-      if (tokens.length === 0) {
-        status.textContent = 'No tokens found.';
-        resultsTable.style.display = 'none';
-        replaceBtn.disabled = true;
-        return;
-      }
-
-      for (const token of tokens) {
-        const tr = document.createElement('tr');
-
-        const tdHex = document.createElement('td');
-        const hexWrapper = document.createElement('div');
-        hexWrapper.className = 'hex-cell';
-        const swatch = document.createElement('span');
-        swatch.className = 'color-swatch';
-        swatch.style.background = token.hex;
-        hexWrapper.appendChild(swatch);
-        hexWrapper.appendChild(document.createTextNode(token.hex));
-        tdHex.appendChild(hexWrapper);
-        tr.appendChild(tdHex);
-
-        const tdVariable = document.createElement('td');
-        tdVariable.textContent = token.variableName;
-        tr.appendChild(tdVariable);
-
-        resultsBody.appendChild(tr);
-      }
-
-      status.textContent = `${tokens.length} token(s) found.`;
-      resultsTable.style.display = 'table';
-      replaceBtn.disabled = false;
+      tdVar.innerHTML = '<div class="var-cell"><span class="collision-icon" title="Collision: multiple variables share this hex">⚠</span></div>';
+      tdVar.querySelector('.var-cell').appendChild(select);
+    } else {
+      tdVar.innerHTML = `<div class="var-cell"><span class="var-name" title="${esc(token.collectionName + '/' + token.variableName)}">${esc(token.variableName)}</span></div>`;
     }
+    tr.appendChild(tdVar);
 
-    findBtn.addEventListener('click', () => {
-      status.textContent = 'Searching...';
-      parent.postMessage({ pluginMessage: { type: 'findTokens' } }, '*');
+    resultsBody.appendChild(tr);
+  }
+
+  updateReplaceButton();
+}
+
+// ─── Plugin Message Handler ───────────────────────────────────────────────────
+window.onmessage = (event) => {
+  const msg = event.data.pluginMessage;
+  if (!msg) return;
+
+  switch (msg.type) {
+    case 'scanStart':
+      progressWrap.classList.add('visible');
+      progressFill.style.width = '2%';
+      progressLabel.textContent = 'Scanning…';
+      btnScan.disabled = true;
+      setStatus('');
+      break;
+
+    case 'scanProgress':
+      const pct = msg.total > 0 ? Math.round((msg.current / msg.total) * 100) : 0;
+      progressFill.style.width = Math.max(pct, 2) + '%';
+      progressLabel.textContent = `Scanning ${msg.pageName}… ${pct}%`;
+      break;
+
+    case 'noVariables':
+      progressWrap.classList.remove('visible');
+      btnScan.disabled = false;
+      setStatus('No local color variables found in this document.', 'error');
+      break;
+
+    case 'foundTokens':
+      progressWrap.classList.remove('visible');
+      progressFill.style.width = '100%';
+      btnScan.disabled = false;
+      allTokens = msg.data;
+      collisionOverrides = {};
+      renderResults(allTokens);
+
+      if (msg.data.length === 0) {
+        setStatus('No hardcoded colors found — all fills are already variable-bound! 🎉', 'success');
+      } else {
+        const collCount = msg.collisionCount;
+        setStatus(
+          `${msg.data.length} token${msg.data.length !== 1 ? 's' : ''} found across ${msg.pagesScanned} page${msg.pagesScanned !== 1 ? 's' : ''}.` +
+          (collCount > 0 ? ` ${collCount} collision${collCount !== 1 ? 's' : ''} — review ⚠ rows.` : ''),
+          collCount > 0 ? 'warn' : ''
+        );
+      }
+      break;
+
+    case 'replaceComplete':
+      const { replacedCount, skippedCount, errorCount } = msg;
+      let statusMsg = `✅ Replaced ${replacedCount} token${replacedCount !== 1 ? 's' : ''}`;
+      if (skippedCount > 0) statusMsg += ` · ${skippedCount} skipped`;
+      if (errorCount > 0) statusMsg += ` · ${errorCount} errors`;
+      setStatus(statusMsg, 'success');
+
+      // Re-scan after replace to update UI
+      setTimeout(() => {
+        parent.postMessage({ pluginMessage: { type: 'findTokens', options: getScanOptions() } }, '*');
+      }, 800);
+      break;
+
+    case 'exportReport':
+      downloadCSV(msg.csv, `heavy-token-report-${Date.now()}.csv`);
+      setStatus(`Exported ${msg.tokenCount} tokens to CSV`, 'success');
+      break;
+  }
+};
+
+// ─── CSV Download ─────────────────────────────────────────────────────────────
+function downloadCSV(csv, filename) {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─── Button Handlers ──────────────────────────────────────────────────────────
+btnScan.addEventListener('click', () => {
+  parent.postMessage({ pluginMessage: { type: 'findTokens', options: getScanOptions() } }, '*');
+});
+
+btnReplace.addEventListener('click', () => {
+  const selected = getSelectedTokens();
+  if (selected.length === 0) return;
+  btnReplace.disabled = true;
+  setStatus(`Replacing ${selected.length} token${selected.length !== 1 ? 's' : ''}…`);
+  parent.postMessage({
+    pluginMessage: {
+      type: 'replaceTokens',
+      tokens: selected,
+      overrides: collisionOverrides,
+    }
+  }, '*');
+});
+
+btnExport.addEventListener('click', () => {
+  parent.postMessage({ pluginMessage: { type: 'exportReport', tokens: allTokens } }, '*');
+});
+
+btnSelectAll.addEventListener('click', () => {
+  resultsBody.querySelectorAll('.row-check:not([style*="display:none"])').forEach(cb => {
+    const row = cb.closest('tr');
+    if (!row.classList.contains('hidden-row')) cb.checked = true;
+  });
+  updateReplaceButton();
+});
+
+btnDeselectAll.addEventListener('click', () => {
+  resultsBody.querySelectorAll('.row-check').forEach(cb => cb.checked = false);
+  updateReplaceButton();
+});
+
+btnSelectCollisions.addEventListener('click', () => {
+  resultsBody.querySelectorAll('.row-check').forEach(cb => {
+    const row = cb.closest('tr');
+    cb.checked = row.dataset.collision === 'true';
+  });
+  updateReplaceButton();
+});
+
+// Filter tabs
+document.querySelectorAll('.filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentFilter = tab.dataset.filter;
+
+    resultsBody.querySelectorAll('tr').forEach(row => {
+      row.classList.remove('hidden-row');
+      const isCollision = row.dataset.collision === 'true';
+      if (currentFilter === 'clean' && isCollision) row.classList.add('hidden-row');
+      if (currentFilter === 'collision' && !isCollision) row.classList.add('hidden-row');
     });
 
-    replaceBtn.addEventListener('click', () => {
-      parent.postMessage({ pluginMessage: { type: 'replaceTokens', data: foundTokens } }, '*');
-    });
-  </script>
+    updateReplaceButton();
+  });
+});
+</script>
 </body>
 </html>
